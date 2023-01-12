@@ -1,29 +1,24 @@
----
-# This is an instruction file create create azure pipeline files
+document:
+  - include: trigger.yaml
+  
+  - include: pool.yaml
 
-include: trigger.yaml
+  - include: variables.yaml
+    parameters:
+      solution: solutionpath
 
-include: pool.yaml
+  - include: steps.yaml
+    list:
+    - include: NuGetToolInstaller@1.yaml
 
-include: variables.yaml
-     
-include: steps.yaml
+    - include: NuGetCommand@2.yaml
 
-- include: NuGetToolInstaller@1.yaml
-     
-- include: NuGetCommand@2.yaml
+    - include: VSBuild@1ASPNET.yaml
 
-- include: NuGetCommand@2.yaml
+    - include: VSBuild@1Desktop.yaml
 
-- if: ASPNET
-  include: VSBuild@1ASPNET.yaml
+    - include: VSTest@2.yaml
 
-- if: DESKTOP
-  include: VSBuild@1Desktop.yaml
+    - include: CopyFiles@2.yaml
 
-- if: HASTESTProject
-  include: VSTest@2.yaml
-
-- include: CopyFiles@2.yaml
-
-- include: PublishBuildArtifacts@1.yaml
+    - include: PublishBuildArtifacts@1.yaml
